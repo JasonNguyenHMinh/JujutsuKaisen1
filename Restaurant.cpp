@@ -122,6 +122,24 @@ public:
 				//sua vi tri gan nhat co su thay doi
 				current = k;
 			}
+			 void DelCurrCustomer(){
+				 customer* del = current;
+				 if (current->energy < 0) {
+					 current = current->prev;
+				 }
+				 else current = current->next;
+				 del->next->prev = del->prev;
+				 del->prev->next = del->next;
+				 delete del;
+				 count--;
+			 }
+			 void clearTable() {
+				 customer* clear = current;
+				 customer* prev_1 = current->prev;
+				 while (clear->next != current) {
+
+				 }
+			 }
 			customer* BiggestRESValue(customer*the_one) {
 				//Kiem vi tri ma hieu tri tuyet doi la lon nhat
 				//DCM sao mình lại đi làm cái củ lìn này nhỉ ???
@@ -177,25 +195,22 @@ public:
 			void push(customer* waiting) {
 				add(waiting);
 			}
-			customer* pop() {
-				customer* result = first;
+			void pop() {
 				first = first->next;
 				delete first->prev;
 				first->prev = nullptr;
 				count--;
-				return result;
 			}
 			int getCount() {
 				return count;
 			}
 			bool isEmpty() {
-				return first == nullptr;
+				return first == nullptr ? 1 : 0;
 			}
-			void delFirstCus() {
-				first = first->next;
-				delete first->prev;
-				first->prev = nullptr;
+			customer* getHead() {
+				return first;
 			}
+			
 			bool findNameofDLL(customer* checker) {
 				//kiem coi trong DLL co customer cung ten ko ?
 				if (first == nullptr) { return true; }
