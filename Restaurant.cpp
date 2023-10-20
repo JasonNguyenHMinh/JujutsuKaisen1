@@ -6,7 +6,7 @@ public:
 	
 	public:	
 		imp_res() {};
-
+		~imp_res(){};
 		void RED(string name, int energy)
 		{
 			cout << name << " " << energy << endl;
