@@ -16,7 +16,7 @@ public:
 			if (table.findNameofDCLL(cus)!=nullptr) { return; }
 					else if (table.isEmpty()) {
 						table.addCusFirst(cus);
-						order.add(cus);
+						order.add(new customer(name,energy,nullptr,nullptr));
 					}
 			        else if (table.getCount() < MAXSIZE/2) {
 						if (table.getCurr()->energy <= energy) {
@@ -25,9 +25,9 @@ public:
 						else {
 							table.addCusLeft(cus);
 						}
-						order.add(cus);
+						order.add(new customer(name,energy,nullptr,nullptr));
 					}
-					else if(table.getCount()<=MAXSIZE){
+					else if(table.getCount()<MAXSIZE){
 						customer* the_x = table.BiggestRESValue(cus);
 						table.setCurr(the_x);
 						if (energy - the_x->energy < 0) {
@@ -36,14 +36,14 @@ public:
 						else {
 							table.addCusRight(cus);
 						}
-						order.add(cus);
+						order.add(new customer(name,energy,nullptr,nullptr));
 					}
 					else {
 						if (order.findNameofDLL(cus)!=nullptr) { return; }
 						if (queue.getCount() >= MAXSIZE) { return; }
 
-						queue.push(cus);
-						order.add(cus);
+						queue.push(new customer(name,energy,nullptr,nullptr));
+						order.add(new customer(name,energy,nullptr,nullptr));
 					}
 
 		}
@@ -59,12 +59,15 @@ public:
 			}
 			num = num_2;
 			num = num < MAXSIZE ? num : MAXSIZE;
-			if (order.isEmpty()) return;
+			if (queue.isEmpty()) return;
 			for (int k = num; k > 0; k--) {
-				if (order.getCount() == 0) return;
-				RED(order.top()->name, order.top()->energy);
 				order.pop();
+				RED(queue.top()->name, queue.top()->energy);
+				queue.pop();
 			}
+
+
+			order.readQueue();
 		}
 		void PURPLE()
 		{
@@ -169,7 +172,7 @@ public:
 				customer* check = current;
 				customer* result = nullptr;
 				int RES = 0;
-				while (check->next != current) {
+				for (int i = 0; i < count;i++) {
 					if (abs((the_one->energy) - (check->energy)) > RES) {
 						RES = abs((the_one->energy) - (check->energy));
 						result = check;
@@ -182,7 +185,7 @@ public:
 				//kiem coi trong DCLL co customer cung ten ko ?
 				if (current == nullptr) { return nullptr; }
 				customer* run = current;
-				while (run->next != current) {
+				for (int i = 0; i < count;i++) {
 					if (checker->name == run->name) {
 						return run;
 					}
@@ -193,13 +196,13 @@ public:
 			void readTable(int num) {
 				customer* run = current;
 				if (num > 0) {
-					while (run->next != current) {
+					for (int k = 0; k < count;k++) {
 						run->print();
 						run = run->next;
 					}
 				}
 				else {
-					while (run->prev != current) {
+					for (int k = 0; k < count; k++) {
 						run->print();
 						run = run->prev;
 					}
@@ -233,6 +236,12 @@ public:
 				add(waiting);
 			}
 			void pop() {
+				if (count == 1) {
+					delete first;
+					first = last = nullptr;
+					return;
+					count == 0;
+				}
 				first = first->next;
 				delete first->prev;
 				first->prev = nullptr;
@@ -263,8 +272,9 @@ public:
 			}
 
 			void readQueue() {
+				if (count == 0) return;
 				customer* running = first;
-				while (running != last) {
+				for (int i = 0; i < count;i++) {
 					running->print();
 					running = running->next;
 				}
