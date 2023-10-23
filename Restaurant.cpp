@@ -66,8 +66,6 @@ public:
 				queue.pop();
 			}
 
-
-			order.readQueue();
 		}
 		void PURPLE()
 		{
@@ -239,13 +237,15 @@ public:
 				if (count == 1) {
 					delete first;
 					first = last = nullptr;
-					return;
-					count == 0;
+					this->count--;
 				}
-				first = first->next;
-				delete first->prev;
-				first->prev = nullptr;
-				count--;
+				else {
+					first = first->next;
+					customer* del = first->prev;
+					first->prev = nullptr;
+					delete del;
+					this->count--;
+				}
 			}
 			int getCount() {
 				return count;
