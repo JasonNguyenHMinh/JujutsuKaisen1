@@ -59,8 +59,8 @@ public:
 			}
 			num = num_2;
 			num = num < MAXSIZE ? num : MAXSIZE;
-			if (queue.isEmpty()) return;
 			for (int k = num; k > 0; k--) {
+				if (queue.isEmpty()) break;
 				order.pop();
 				RED(queue.top()->name, queue.top()->energy);
 				queue.pop();
