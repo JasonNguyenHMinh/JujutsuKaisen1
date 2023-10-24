@@ -2,9 +2,7 @@
 
 class imp_res : public Restaurant
 {
-public:
-	
-	public:	
+public:	
 		imp_res() {};
 		~imp_res(){};
 		void RED(string name, int energy)
@@ -78,6 +76,11 @@ public:
 		void UNLIMITED_VOID()
 		{
 			cout << "unlimited_void" << endl;
+			if (table.getCount() < 4) return;
+			else {
+				table.KadaneAgloSmall(table);
+			}
+
 		}
 		void DOMAIN_EXPANSION()
 		{
@@ -144,6 +147,35 @@ public:
 				if (k == nullptr) return;
 				current = k;
 			}
+
+			void KadaneAgloSmall(imp_res::DCLinkedList fulllist) {
+				imp_res::DCLinkedList sublist;
+				int curr_sum=0, global_sum=INT_MAX,num_of_minCus=0;
+				for (int i = 0; i < fulllist.getCount();i++) {
+					curr_sum += fulllist.getCurr()->energy;
+					if (global_sum >= curr_sum && i >= 3) {
+						global_sum = curr_sum;
+						num_of_minCus = i;
+					}
+				}
+				customer* cpy = fulllist.getCurr();
+				for (int j = 0; j < num_of_minCus; j++) {
+					if (j == 0) {
+						sublist.addCusFirst(new customer(cpy->name, cpy->energy, nullptr, nullptr));
+					}
+					else {
+						sublist.addCusRight(new customer(cpy->name, cpy->energy, nullptr, nullptr));
+					}
+					cpy = cpy->next;
+				}
+				customer* smallest = sublist.getCurr();
+				for (int i = 0; i < num_of_minCus; i++) {
+					if (sublist.getCurr()->energy > smallest->energy) sublist.setCurr(smallest);
+					smallest = smallest->next;
+				}
+				sublist.readTable(1);
+			 }
+
 			
 			 void DelCurrCustomer(){
 				 if (current == nullptr) return;
@@ -207,6 +239,7 @@ public:
 				}
 			}
 		} table;
+
 		class DLinkedList {
 		private:
 			int count;
@@ -217,6 +250,7 @@ public:
 				count = 0;
 				first = last = nullptr;
 			}
+			~DLinkedList(){}
 			void add(customer* new_one) {
 				//Them 1 node vao DLL ko vong
 				if (count == 0) {
